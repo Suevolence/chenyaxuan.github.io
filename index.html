@@ -34,17 +34,17 @@
     width: 100vw;
   }
 
-  /* ================= 1. 左侧：个人信息面板 (约30%) ================= */
+  /* ================= 1. 左侧：个人信息面板 ================= */
   .sidebar {
-    width: 30%;
-    min-width: 300px;
-    max-width: 420px;
+    width: 26%; /* 稍微缩小宽度占比 */
+    min-width: 280px;
+    max-width: 380px; /* 将最大宽度从 420px 缩到 380px，减少留白 */
     height: 100%;
     background: var(--peach);
     position: relative;
     display: flex;
     flex-direction: column;
-    padding: 40px 30px;
+    padding: 40px 24px; /* 左右内边距从 30px 缩到 24px，内容更贴边 */
     overflow-y: auto;
     flex-shrink: 0;
   }
@@ -67,21 +67,50 @@
     height: 100%;
   }
 
+  /* --- 头像果冻回弹交互 --- */
   .avatar-big { 
     width: 130px; height: 130px; border-radius: 50%; object-fit: cover; 
     border: 4px solid #fff;
     box-shadow: 0 8px 24px rgba(66, 80, 102, 0.15);
     cursor: zoom-in; 
-    transition: transform 0.3s ease;
     margin-bottom: 20px;
+    transition: transform 0.3s ease-out;
   }
-  .avatar-big:hover { transform: scale(1.05); }
+  
+  .avatar-big:hover { transform: scale(0.92); }
+  .avatar-big.bounce-back { animation: bounceBack 0.7s cubic-bezier(0.25, 0.8, 0.25, 1) forwards; }
+
+  @keyframes bounceBack {
+    0% { transform: scale(0.92); }
+    30% { transform: scale(1.08); }
+    50% { transform: scale(0.97); }
+    70% { transform: scale(1.03); }
+    85% { transform: scale(0.99); }
+    100% { transform: scale(1); }
+  }
 
   .text-greeting { font-size: 18px; font-weight: 600; color: var(--text); }
   
-  .name-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px; }
-  .big-name { font-size: 42px; font-weight: 900; line-height: 1; letter-spacing: 1px; color: var(--text); }
-  .year-tag { font-size: 16px; font-weight: 600; color: var(--indigo); }
+  /* 核心修改：名字行 */
+  .name-row { 
+    display: flex; 
+    align-items: baseline; 
+    gap: 8px; /* 间距缩小 */
+    margin-bottom: 8px; 
+    white-space: nowrap; /* 强制不换行 */
+  }
+  .big-name { 
+    font-size: 38px; /* 字号从 42px 微调到 38px，让整体更紧凑 */
+    font-weight: 900; 
+    line-height: 1; 
+    letter-spacing: 1px; 
+    color: var(--text); 
+  }
+  .year-tag { 
+    font-size: 13px; /* 字号缩小到 13px，降低占位 */
+    font-weight: 600; 
+    color: var(--indigo); 
+  }
   
   .edu-line { display: flex; flex-direction: column; gap: 4px; margin-bottom: 24px; }
   .text-degree { font-size: 16px; font-weight: 600; color: var(--muted); }
@@ -94,15 +123,30 @@
   .contact-info a { color: var(--text); text-decoration: none; font-weight: 600; border-bottom: 1px dashed var(--indigo); transition: all 0.3s; }
   .contact-info a:hover { color: var(--indigo); border-bottom-style: solid; }
 
-  /* 标签 */
+  /* --- 气泡摇摆特效 --- */
   .hero-tags { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+  
   .tag {
     background: rgba(255,255,255,0.8); backdrop-filter: blur(4px); 
     border: 1.5px solid var(--peach-dark);
     color: var(--indigo); padding: 6px 14px; border-radius: 999px; font-size: 14px; font-weight: 600;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    transform-origin: center;
   }
-  .tag:hover { background: var(--indigo); color: #fff; border-color: var(--indigo); transform: translateX(4px); }
+  
+  .tag:hover { 
+    background: var(--indigo); 
+    color: #fff; 
+    border-color: var(--indigo); 
+    animation: swing 0.5s ease-in-out;
+  }
+
+  @keyframes swing {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(-6deg); }
+    75% { transform: rotate(6deg); }
+    100% { transform: rotate(0deg); }
+  }
 
   /* ================= 2. 中间：竖向导航栏 ================= */
   .mid-nav {
@@ -115,12 +159,11 @@
     gap: 20px;
     flex-shrink: 0;
     z-index: 5;
-    /* 左侧不加边框，让它和左边的底色融为一体 */
   }
 
   .tab-btn {
-    writing-mode: vertical-rl; /* 文字竖排 */
-    text-orientation: upright; /* 汉字保持直立 */
+    writing-mode: vertical-rl; 
+    text-orientation: upright; 
     letter-spacing: 6px;
     font-size: 16px;
     font-weight: 700;
@@ -128,13 +171,13 @@
     background: #fff;
     border: 1px solid var(--line);
     border-right: none;
-    border-radius: 12px 0 0 12px; /* 插页感：左侧圆角 */
+    border-radius: 12px 0 0 12px; 
     padding: 28px 14px;
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: -2px 2px 8px rgba(0,0,0,0.03);
     position: relative;
-    right: -1px; /* 盖住右侧边线，实现无缝连接 */
+    right: -1px; 
   }
 
   .tab-btn:hover {
@@ -143,11 +186,11 @@
   }
 
   .tab-btn.active {
-    background: var(--bg); /* 和右侧内容区同色，实现翻开的效果 */
-    border-color: var(--line);
-    border-top: 4px solid var(--peach-dark); /* 顶部加粗条，像极标签页 */
-    color: var(--indigo);
-    box-shadow: none;
+    background: var(--indigo);
+    color: #fff; 
+    border-color: var(--indigo); 
+    border-top: none; 
+    box-shadow: -4px 4px 16px rgba(66, 80, 102, 0.25); 
     transform: translateX(0);
   }
 
@@ -249,12 +292,11 @@
 
   footer { padding: 40px 0 20px; color: var(--muted); font-size: 14px; text-align: center;}
 
-  /* ================= 手机端适配 (上下结构) ================= */
+  /* ================= 手机端适配 ================= */
   @media (max-width: 900px) {
     body { overflow: auto; } 
     .app-container { flex-direction: column; height: auto; }
     
-    /* 侧边栏变全宽 */
     .sidebar { 
       width: 100%; max-width: 100%; height: auto; 
       border-right: none; border-bottom: 2px solid var(--peach-dark);
@@ -265,29 +307,19 @@
     .contact-info { align-items: center; }
     .hero-tags { align-items: center; }
     
-    /* 中间导航条变横向，放在左侧和内容之间 */
     .mid-nav { 
-      width: 100%; 
-      flex-direction: row; 
-      padding: 16px; 
-      gap: 12px; 
-      flex-wrap: wrap; 
-      border-bottom: 1px solid var(--line);
+      width: 100%; flex-direction: row; padding: 16px; gap: 12px; 
+      flex-wrap: wrap; border-bottom: 1px solid var(--line);
     }
     .tab-btn { 
-      writing-mode: horizontal-tb; /* 恢复横排 */
-      letter-spacing: normal;
-      border-radius: 999px;
-      border: 1.5px solid var(--line);
-      padding: 8px 16px;
-      font-size: 14px;
-      right: 0;
+      writing-mode: horizontal-tb; letter-spacing: normal;
+      border-radius: 999px; border: 1.5px solid var(--line);
+      padding: 8px 16px; font-size: 14px; right: 0;
     }
     .tab-btn.active { 
-      background: var(--indigo); 
-      color: #fff; 
-      border-color: var(--indigo);
-      border-top: 1.5px solid var(--indigo); /* 移除顶部加粗 */
+      background: var(--indigo); color: #fff; border-color: var(--indigo);
+      border-top: none; 
+      box-shadow: 0 4px 12px rgba(66, 80, 102, 0.2);
     }
 
     .main-content { height: auto; overflow-y: visible; padding: 40px 20px; }
@@ -303,17 +335,17 @@
 
 <div class="app-container">
   
-  <!-- ===== 1. 左侧：个人信息面板 ===== -->
   <aside class="sidebar">
     <canvas id="noise-canvas"></canvas>
     
     <div class="sidebar-content">
-      <img src="images/avatar.jpg" alt="陈雅萱" class="avatar-big">
+      <img src="images/avatar.jpg" alt="陈雅萱" class="avatar-big" id="avatar-img">
       
       <div class="text-greeting">你好，我叫</div>
+      <!-- 修改了这里的 class 与内容 -->
       <div class="name-row">
         <div class="big-name">陈雅萱</div>
-        <div class="year-tag">2002</div>
+        <div class="year-tag">（2002年1月31日）</div>
       </div>
       
       <div class="edu-line">
@@ -336,21 +368,19 @@
     </div>
   </aside>
 
-  <!-- ===== 2. 中间：竖向插页导航 ===== -->
   <nav class="mid-nav">
     <button class="tab-btn active" onclick="switchTab('tab-advantage', this)">个人优势</button>
     <button class="tab-btn" onclick="switchTab('tab-experience', this)">工作与实习经历</button>
     <button class="tab-btn" onclick="switchTab('tab-hobbies', this)">爱好特长</button>
   </nav>
 
-  <!-- ===== 3. 右侧：内容区 ===== -->
   <main class="main-content" id="main-scroll">
     <div class="content-inner">
       
       <section id="tab-advantage" class="tab-content active">
         <h2>个人优势</h2>
         <div class="about-card">
-          <p><strong>思维活跃，天马行空：</strong>喜欢捣鼓新鲜东西，希望能加入新兴行业发光发热！</p>
+          <p><strong>思维活跃，天马行空：</strong>喜欢捣鼓新鲜东西，希望能加入贵司一起进步！</p>
           <p><strong>法学背景，数理思维：</strong>熟悉法律法规，具备扎实的法律专业基础；在校期间数学成绩较好，离职期间做家教辅导数学。</p>
           <p><strong>持续学习，积极进取：</strong>重大事项每周复盘，日常工作每月复盘，在前司工作期间多次完成项目/案件复盘工作。</p>
           <p><strong>稳重抗压，注重协作：</strong>在校期间作为组长统筹规划多次集体作业完成；在无领导小组讨论中组织引导发言。</p>
@@ -419,6 +449,7 @@
             <ul class="item-desc">
               <li>统筹规划并成功举办院级活动（如法学专场招聘双选会等），负责校内外人员对接与服务等。</li>
               <li>负责学院各项活动的赞助事宜，与包括福建天衡联合律师事务所在内的十余家单位签订赞助协议，在赞助对接出现问题时及时沟通、主动协调。</li>
+              <li>负责部门团建事宜，参与筹备院学生会卸任晚会与集体团建。</li>
             </ul>
           </div>
         </div>
@@ -469,7 +500,6 @@
     buttons.forEach(button => button.classList.remove('active'));
     btn.classList.add('active');
     
-    // 仅让右侧内容区滚回顶部
     document.getElementById('main-scroll').scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -513,7 +543,20 @@
     }
   });
 
-  // ================= 流体场背景 =================
+  const avatar = document.getElementById('avatar-img');
+  avatar.addEventListener('mouseleave', () => {
+    avatar.classList.remove('bounce-back');
+    void avatar.offsetWidth; 
+    avatar.classList.add('bounce-back');
+  });
+  avatar.addEventListener('mouseenter', () => {
+    avatar.classList.remove('bounce-back');
+  });
+  avatar.addEventListener('animationend', () => {
+    avatar.classList.remove('bounce-back');
+  });
+
+  // 流体场背景
   const canvas = document.getElementById('noise-canvas');
   const ctx = canvas.getContext('2d', { willReadFrequently: true });
   const hero = document.querySelector('.sidebar'); 
